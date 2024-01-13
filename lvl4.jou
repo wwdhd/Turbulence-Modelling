@@ -1,0 +1,14 @@
+;Reading in the case file
+/rc Level_4_SACFC.cas.h5
+;
+; initialising the system
+/solve/init/init
+;
+;Setting the number of iterations and solving
+/solve/iter 2000
+;
+;Writing the final data file (overwriting if required)
+/wd Level_4_SACFC.dat.h5
+;
+;Exit Fluent
+/exit ok

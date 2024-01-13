@@ -1,0 +1,14 @@
+;Reading in the case file
+/rc Mesh3_SACFC_uref74.cas.h5
+;
+; initialising the system
+/solve/init/init
+;
+;Setting the number of iterations and solving
+/solve/iter 3000
+;
+;Writing the final data file (overwriting if required)
+/wd Mesh3_SACFC_uref74.dat.h5
+;
+;Exit Fluent
+/exit ok
