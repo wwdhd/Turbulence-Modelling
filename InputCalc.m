@@ -55,7 +55,7 @@ x_plot = linspace(50, 75, 75);
 y_plot = polyval(p, x_plot);
 
 % Plot the original data and the fitted line
-figure;
+figure(1);
 plot(x_plot, y_plot, '-'); % plot the fitted line
 hold on
 scatter(u_ref_cfd, u_inp_cfd, 'red','filled','o')
@@ -66,12 +66,66 @@ hold off;
 
 %Find the point
 u_sc_actual = polyval(p, u_ts);
-percent_error = (abs(u_ts-67.3067)/(u_sc_actual))*100;
+percent_error = abs(u_ts-67.3067)
 %%
-disp('Air Properties in Pitot Static Flow')
+disp('AIR PROPERTIES AND INPUT')
 fprintf('Inlet Velocity (m/s): %.4f ', u_sc_actual);
 fprintf('Initial Calculation Input Velocity (m/s): %.4f ', u_sc);
 fprintf('Difference (percent): %.4f ', percent_error);
 fprintf('Pitot Static Velocity (m/s): %.4f ', u_ts);
 fprintf('Reference density (kg/m3): %.4f ', rho_ref);
 fprintf('Kinematic viscosity (m2/s): %.4e\n', nu);
+%%
+%Numerical Results
+n_mesh = [1423729 2814664 5613201];
+m_imbal = [-0.01039 3.2924872e-05 1e-6];
+v_pitot = [67.371689 67.224817 67.472389];
+ps_ref_cfd = [91956.266 91828.233 91927.336];
+pt_ref_cfd = [94358.844 94273.18 94282.938];
+
+%Analytical Results
+n_mesh_analytical = [0 6000000]
+v_ts_array = repmat(u_ts, 1, size(n_mesh_analytical, 2))
+ps_array = repmat(Ps_ref, 1, size(n_mesh_analytical, 2))
+pt_array = repmat(Pt_ref, 1, size(n_mesh_analytical, 2))
+%%
+figure(2);
+ax1 = subplot(2,2,1);
+plot(n_mesh, m_imbal, '-o');
+ylim([-1, 1])
+ylabel('Mass Imbalance (kg/s)','Interpreter', 'latex', 'FontSize', 14);
+xlabel('Number of Mesh','Interpreter', 'latex', 'FontSize', 14);
+set(gca,'TickLabelInterpreter','latex','FontSize',14)
+
+ax2 = subplot(2,2,2);
+plot(n_mesh, v_pitot/, '-o');
+hold on
+plot(n_mesh_analytical, v_ts_array, '--', 'Color','r')
+hold off
+ylim([0, 80])
+ylabel('Velocity (m/s)','Interpreter', 'latex', 'FontSize', 14);
+xlabel('Number of Mesh','Interpreter', 'latex', 'FontSize', 14);
+legend('Numerical', 'Analytical','Interpreter', 'latex', 'FontSize', 14, 'Location', 'east');
+set(gca, 'TickLabelInterpreter', 'latex', 'FontSize', 14);
+
+ax3 = subplot(2,2,3);
+plot(n_mesh, ps_ref_cfd, '-o');
+hold on
+plot(n_mesh_analytical, ps_array, '--', 'Color','r')
+hold off
+ylim([0, 120000])
+ylabel('Static Pressure (Pa)','Interpreter', 'latex', 'FontSize', 14);
+xlabel('Number of Mesh','Interpreter', 'latex', 'FontSize', 14);
+legend('Numerical', 'Analytical','Interpreter', 'latex', 'FontSize', 14, 'Location', 'east');
+set(gca,'TickLabelInterpreter','latex','FontSize',14)
+
+ax4 = subplot(2,2,4);
+plot(n_mesh, pt_ref_cfd, '-o');
+hold on
+plot(n_mesh_analytical, pt_array, '--', 'Color','r')
+hold off
+ylim([0,120000])
+ylabel('Total Pressure (Pa)','Interpreter', 'latex', 'FontSize', 14);
+xlabel('Number of Mesh','Interpreter', 'latex', 'FontSize', 14);
+legend('Numerical', 'Analytical','Interpreter', 'latex', 'FontSize', 14, 'Location', 'east');
+set(gca,'TickLabelInterpreter','latex','FontSize',14)
